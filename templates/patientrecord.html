@@ -1,0 +1,428 @@
+
+{% load static %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="">
+  <link rel="icon" type="image/png" href="#">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+  <title>
+   Patient Record
+  </title>
+  <!--     Fonts and icons     -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+  <!-- Nucleo Icons -->
+  <link href="../static/assets/css/nucleo-icons.css" rel="stylesheet" />
+  <link href="../static/assets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <link href="../static/assets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- CSS Files -->
+  <link id="pagestyle" href="../static/assets/css/argon-dashboard.css?v=2.0.4" rel="stylesheet" />
+</head>
+
+<body class="g-sidenav-show   bg-gray-100">
+  <div class="min-height-300 bg-primary position-absolute w-100"></div>
+  <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 " id="sidenav-main">
+    <div class="sidenav-header">
+      <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
+      <a class="navbar-brand m-0" href="{% url 'home' %}">
+        <img src="../static/assets/img/logo-ct-dark.png" class="navbar-brand-img h-100" alt="main_logo">
+        <span class="ms-1 font-weight-bold">Sandra Medline </span>
+      </a>
+    </div>
+    <hr class="horizontal dark mt-0">
+    <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'dashboard' %}">
+            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="ni ni-calendar-grid-58 text-primary text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Doctor Appointment Page</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'patiententry' %}">
+            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Patient Profile</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'doctorentry' %}">
+              <div
+                  class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                  <i class="fas fa-user-md text-success text-sm opacity-10"></i>
+              </div>
+              <span class="nav-link-text ms-1">Doctor Profile</span>
+          </a>
+      </li>
+        <li class="nav-item mt-3">
+          <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Patient Record</h6>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link active" href="{% url 'patientrecord' %}">
+              <div
+                  class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                  <i class="fas fa-user text-danger text-sm opacity-10"></i>
+              </div>
+              <span class="nav-link-text ms-1">Patient Record</span>
+          </a>
+          </li>
+      </ul>
+    </div>
+  </aside>
+  <main class="main-content position-relative border-radius-lg ">
+    <!-- Navbar -->
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl " id="navbarBlur" data-scroll="false">
+      <div class="container-fluid py-1 px-3">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-white" href="javascript:;">Pages</a></li>
+            <li class="breadcrumb-item text-sm text-white active" aria-current="page">Patient Record Page</li>
+          </ol>
+          <h6 class="font-weight-bolder text-white mb-0">Patient Record</h6>
+        </nav>
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+            <div class="form-group">
+              <select class="btn bg-gradient-danger mb-0" aria-label="Select Patient" id="patient-select">
+                {% for patient in patients %}
+                <option class="btn bg-gradient-danger mb-0" value="{{ patient.id_p }}" id="{{ patient.id_p }}">{{ patient.id_p }} - {{ patient.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+              <button class="btn bg-gradient-success" id="search-button">Search</button>
+            </div>
+         
+            
+        </div>
+        </div>
+        
+      </div>
+    </nav>
+    <!-- End Navbar -->
+    <div class="container-fluid py-4">
+      <div class="container-fluid py-4">
+        <div class="row">
+          <div class="col-8">
+            <div class="card mb-4">
+              <div class="card-header pb-0">
+                <h6>Avaliable Doctors {{appointments}}</h6>
+              </div>
+              <div class="card-body px-0 pt-0 pb-2">
+                <div class="table-responsive p-0">
+                  <table class="table align-items-center mb-0">
+                    <thead>
+                      <tr>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Doctor Name</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Specialty</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Booking</th>
+                      </tr>
+                    </thead>
+                    <tbody id="appointment-table-body">
+                      <!-- Table rows will be dynamically added here -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card card-profile">
+              <img src="../static/assets/img/bg-profile.jpg" alt="Image placeholder" class="card-img-top">
+              <div class="row justify-content-center">
+                <div class="col-4 col-lg-4 order-lg-2">
+                  <div class="mt-n4 mt-lg-n6 mb-4 mb-lg-0">
+                    <a href="javascript:;">
+                      <img src="https://xsgames.co/randomusers/avatar.php?g=pixel" class="rounded-circle img-fluid border border-2 border-white">
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body pt-0">
+                <div class="text-center mt-4">
+                  <h5>
+                    <span id="patient-name"></span>
+                  </h5>
+                  <div class="h6 font-weight-300">
+                    <i class="ni location_pin mr-2"></i><span id="patient-email"></span>
+                  </div>
+                  <div class="h6 mt-4">
+                    <i class="ni business_briefcase-24 mr-2"></i><span id="patient-address"></span>
+                  </div>
+                  <div>
+                    <i class="ni education_hat mr-2"></i><span id="patient-phone"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+      <footer class="footer pt-3  ">
+        <div class="container-fluid">
+          <div class="row align-items-center justify-content-lg-between">
+            <div class="col-lg-6 mb-lg-0 mb-4">
+              <div class="copyright text-center text-sm text-muted text-lg-start">
+                © <script>
+                  document.write(new Date().getFullYear())
+                </script>,
+                made with <i class="fa fa-heart"></i> by
+                <a href="https://github.com/sandraomanakuttan" class="font-weight-bold" target="_blank">SANDRA </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </main>
+  <div class="fixed-plugin">
+    <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
+      <i class="fa fa-cog py-2"> </i>
+    </a>
+    <div class="card shadow-lg">
+      <div class="card-header pb-0 pt-3 ">
+        <div class="float-start">
+          <h5 class="mt-3 mb-0">Argon Configurator</h5>
+          <p>See our dashboard options.</p>
+        </div>
+        <div class="float-end mt-4">
+          <button class="btn btn-link text-dark p-0 fixed-plugin-close-button">
+            <i class="fa fa-close"></i>
+          </button>
+        </div>
+        <!-- End Toggle Button -->
+      </div>
+      <hr class="horizontal dark my-1">
+      <div class="card-body pt-sm-3 pt-0 overflow-auto">
+        <!-- Sidebar Backgrounds -->
+        <div>
+          <h6 class="mb-0">Sidebar Colors</h6>
+        </div>
+        <a href="javascript:void(0)" class="switch-trigger background-color">
+          <div class="badge-colors my-2 text-start">
+            <span class="badge filter bg-gradient-primary" data-color="primary" onclick="sidebarColor(this)"></span>
+            <span class="badge filter bg-gradient-dark active" data-color="dark" onclick="sidebarColor(this)"></span>
+            <span class="badge filter bg-gradient-info" data-color="info" onclick="sidebarColor(this)"></span>
+            <span class="badge filter bg-gradient-success" data-color="success" onclick="sidebarColor(this)"></span>
+            <span class="badge filter bg-gradient-warning" data-color="warning" onclick="sidebarColor(this)"></span>
+            <span class="badge filter bg-gradient-danger" data-color="danger" onclick="sidebarColor(this)"></span>
+          </div>
+        </a>
+
+        <hr class="horizontal dark my-sm-4">
+        <div class="mt-2 mb-5 d-flex">
+          <h6 class="mb-0">Light / Dark</h6>
+          <div class="form-check form-switch ps-0 ms-auto my-auto">
+            <input class="form-check-input mt-1 ms-auto" type="checkbox" id="dark-version" onclick="darkMode(this)">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--   Core JS Files   -->
+  <script src="../static/assets/js/core/popper.min.js"></script>
+  <script src="../static/assets/js/core/bootstrap.min.js"></script>
+  <script src="../static/assets/js/plugins/perfect-scrollbar.min.js"></script>
+  <script src="../static/assets/js/plugins/smooth-scrollbar.min.js"></script>
+  <script src="../static/assets/js/plugins/chartjs.min.js"></script>
+  <script>
+    var ctx1 = document.getElementById("chart-line").getContext("2d");
+
+    var gradientStroke1 = ctx1.createLinearGradient(0, 230, 0, 50);
+
+    gradientStroke1.addColorStop(1, 'rgba(94, 114, 228, 0.2)');
+    gradientStroke1.addColorStop(0.2, 'rgba(94, 114, 228, 0.0)');
+    gradientStroke1.addColorStop(0, 'rgba(94, 114, 228, 0)');
+    new Chart(ctx1, {
+      type: "line",
+      data: {
+        labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        datasets: [{
+          label: "Mobile apps",
+          tension: 0.4,
+          borderWidth: 0,
+          pointRadius: 0,
+          borderColor: "#5e72e4",
+          backgroundColor: gradientStroke1,
+          borderWidth: 3,
+          fill: true,
+          data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
+          maxBarThickness: 6
+
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false,
+          }
+        },
+        interaction: {
+          intersect: false,
+          mode: 'index',
+        },
+        scales: {
+          y: {
+            grid: {
+              drawBorder: false,
+              display: true,
+              drawOnChartArea: true,
+              drawTicks: false,
+              borderDash: [5, 5]
+            },
+            ticks: {
+              display: true,
+              padding: 10,
+              color: '#fbfbfb',
+              font: {
+                size: 11,
+                family: "Open Sans",
+                style: 'normal',
+                lineHeight: 2
+              },
+            }
+          },
+          x: {
+            grid: {
+              drawBorder: false,
+              display: false,
+              drawOnChartArea: false,
+              drawTicks: false,
+              borderDash: [5, 5]
+            },
+            ticks: {
+              display: true,
+              color: '#ccc',
+              padding: 20,
+              font: {
+                size: 11,
+                family: "Open Sans",
+                style: 'normal',
+                lineHeight: 2
+              },
+            }
+          },
+        },
+      },
+    });
+  </script>
+  <script>
+    var win = navigator.platform.indexOf('Win') > -1;
+    if (win && document.querySelector('#sidenav-scrollbar')) {
+      var options = {
+        damping: '0.5'
+      }
+      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
+  </script>
+  <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
+
+  <script src="../static/assets/js/argon-dashboard.min.js?v=2.0.4"></script>
+  <script src="https://cdn.jsdelivr.ne` t/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+  crossorigin="anonymous"></script>
+</body>
+<script>
+  // Get the patient select element
+  const patientSelect = document.querySelector('#patient-select');
+  const searchButton = document.querySelector('#search-button');
+  const patientNameElement = document.querySelector('#patient-name');
+  const patientEmailElement = document.querySelector('#patient-email');
+  const patientAddressElement = document.querySelector('#patient-address');
+  const patientPhoneElement = document.querySelector('#patient-phone');
+  const random_pic = [
+  '../static/assets/img/team-2.jpg',
+  '../static/assets/img/team-1.jpg',
+  '../static/assets/img/team-3.jpg',
+  '../static/assets/img/team-4.jpg',
+  'https://xsgames.co/randomusers/avatar.php?g=male',
+  'https://xsgames.co/randomusers/avatar.php?g=female',
+  'https://xsgames.co/randomusers/avatar.php?g=pixel'
+];
+    
+
+  function retrieveDoctorRecords(patientId) {
+  const url = `/getrecord/${patientId}/`;
+
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      // Update the HTML table with the retrieved patient record
+      const tableBody = document.querySelector('#appointment-table-body');
+      tableBody.innerHTML = ''; // Clear the table body
+
+      data.appointments.forEach(appointment => {
+        const row = document.createElement('tr');
+        const doctorImage = document.createElement('img');
+        const randomIndex = Math.floor(Math.random() * random_pic.length);
+        doctorImage.src = random_pic[randomIndex];
+        doctorImage.alt = 'Doctor Image';
+        doctorImage.classList.add('doctor-image');
+        const doctorName = document.createElement('td');
+        doctorName.innerHTML = `
+        <div class='d-flex px-2 py-1'>
+        <img class='avatar avatar-sm me-3' src="${doctorImage.src}" alt="${doctorImage.alt}" class="${doctorImage.classList}">
+        <h6 class="mb-0 text-sm">${appointment.doctor_name}</h6>
+        </div>`
+        const specialty = document.createElement('td');
+        specialty.innerHTML = `<p class="text-xs font-weight-bold mb-0">${appointment.specialty}</p>`;
+        const appointmentDate = document.createElement('td');
+        appointmentDate.innerHTML = `<span class="text-secondary text-xs font-weight-bold">${appointment.booking}</span>`;
+
+        row.appendChild(doctorName);
+        row.appendChild(specialty);
+        row.appendChild(appointmentDate);
+        tableBody.appendChild(row);
+      });
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+}
+
+// Add event listener for the button click event
+searchButton.addEventListener('click', function() {
+  // Get the selected patient ID
+  const selectedPatientId = patientSelect.value;
+
+  // Call the function to retrieve the patient record
+  retrievePatientRecord(selectedPatientId);
+});
+
+// Function to retrieve the patient record
+function retrievePatientRecord(patientId) {
+  const url = `/getpatient/${patientId}/`;
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      // Update the HTML elements with the retrieved patient data
+      patientNameElement.innerText = data.name;
+      patientEmailElement.innerText = data.email;
+      patientAddressElement.innerText = data.address;
+      patientPhoneElement.innerText = data.phone_number;
+      retrieveDoctorRecords(patientId);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+}
+
+</script>
+
+
+</html>
+{% endblock content %}
